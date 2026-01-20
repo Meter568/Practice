@@ -1,0 +1,49 @@
+@font-face{
+  font-family: 'fa-brands-400';
+  src: url('../fonts/fa-brands-400.woff2') format('woff2'),
+       url('../fonts/fa-brands-400.woff') format('woff'),
+       url('../fonts/fa-brands-400.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'fa-duotone-900';
+  src: url('../fonts/fa-duotone-900.woff2') format('woff2'),
+       url('../fonts/fa-duotone-900.woff') format('woff'),
+       url('../fonts/fa-duotone-900.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'fa-light-300';
+  src: url('../fonts/fa-light-300.woff2') format('woff2'),
+       url('../fonts/fa-light-300.woff') format('woff'),
+       url('../fonts/fa-light-300.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'fa-regular-400';
+  src: url('../fonts/fa-regular-400.woff2') format('woff2'),
+       url('../fonts/fa-regular-400.woff') format('woff'),
+       url('../fonts/fa-regular-400.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'fa-solid-900';
+  src: url('../fonts/fa-solid-900.woff2') format('woff2'),
+       url('../fonts/fa-solid-900.woff') format('woff'),
+       url('../fonts/fa-solid-900.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
