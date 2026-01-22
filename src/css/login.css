@@ -90,6 +90,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
+    text-align: right;
 }
 
 .left-area .form-login .row .btn {
