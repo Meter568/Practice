@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-const url = ref('http://affiliate.yanbasok.com')
+const url = ref("https://affiliate.yanbasok.com")
 const user = ref({
   name: "",
   phone: "",

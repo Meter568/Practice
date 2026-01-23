@@ -23,7 +23,7 @@ function randomIntFromInterval(min, max) {
 function login() {
     let data = props.toFormData(props.formData);
 
-    axios.post(props.url+"/site/login",data).then(function(response){
+    axios.post(props.url+"/site/login", data).then(function(response){
         if(response.data.error){
             msg.value.alertFun(response.data.error);
         }
