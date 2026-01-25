@@ -88,15 +88,18 @@ watch(
 </script>
 
 <template>
-  <router-view 
-    :url="url" 
-    :user="user"
-    :formData="formData"
-    :title="title" 
-    :date="date" 
-    :time="time"
-    :page="page"
-    :logout="logout"
-    :toFormData="toFormData"
-  />
+  <router-view v-slot="{ Component }">
+    <component 
+      :is = "Component"
+      :url="url" 
+      :user="user"
+      :formData="formData"
+      :title="title" 
+      :date="date" 
+      :time="time"
+      :page="page"
+      :logout="logout"
+      :toFormData="toFormData"
+    />
+  </router-view>
 </template>

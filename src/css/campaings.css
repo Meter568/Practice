@@ -1,0 +1,41 @@
+.campaings #spinner {
+    background: #919fa640 url('./loader.gif') no-repeat;
+    background-position: center;
+    background-size: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999999;
+}
+
+.campaings .wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    width: 100%;
+    font-family: 'fa-brands-400', sans-serif;
+}
+
+.campaings .wrapper .panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.campaings .wrapper .panel .btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #00C477;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.campaings .wrapper .panel .btn:hover {
+    background-color: #00A05A;
+}
