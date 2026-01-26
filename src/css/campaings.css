@@ -1,5 +1,5 @@
 .campaings #spinner {
-    background: #919fa640 url('./loader.gif') no-repeat;
+    background: #919fa640 url('/loader.gif') no-repeat;
     background-position: center;
     background-size: 50px;
     position: fixed;
