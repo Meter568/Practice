@@ -1,11 +1,15 @@
 <script setup>
 import { ref } from "vue";
-import "../css/msg.css"
+import Popup from "./Popup.vue";
+import "../css/msg.css";
 
 const alert = ref("");
 const success = ref("");
 const t1 = ref("");
 const t2 = ref("");
+const confirmTitle = ref("Please confirm next action");
+const confirm = ref("");
+const popup = ref(null)
 const code = ref(0);
 const interval = ref("");
 
@@ -59,8 +63,30 @@ function alertFun(msg){
     }, 100)
 }
 
+function confirmFun(title, text){
+    code.value = 0;
+    return new Promise(function(resolve, reject){
+        confirmTitle.value = title;
+        confirm.value = text;
+        popup.value.active = 1;
+        interval.value = setInterval(function(){
+            if(code.value > 0) resolve();
+        }, 100)
+    }).then(function(){
+        clearInterval(interval.value);
+        popup.value.active = 0;
+        if(code.value == 1){
+            return true;
+        }
+        if(code.value == 2){
+            return false;
+        }
+    })
+}
+
 defineExpose({
-    alertFun
+    alertFun,
+    confirmFun
 })
 
 </script>
@@ -76,4 +102,13 @@ defineExpose({
             {{ success }} <i class="fas fa-check-circle"></i>
         </div>
     </div>
+    <Popup ref="popup" :title="confirmTitle">
+        <div class="al">
+            {{ confirm }} <i class="fas fa-info-circle"></i>
+            <div class="botBtns">
+                <a class="btnS" href="#" @click.prevent="code=2">No</a>
+                <a class="btnS" href="#" @click.prevent="code=1">Yes</a>
+            </div>
+        </div>
+    </Popup>
 </template>

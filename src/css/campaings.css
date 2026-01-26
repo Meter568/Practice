@@ -39,3 +39,87 @@
 .campaings .wrapper .panel .btn:hover {
     background-color: #00A05A;
 }
+
+.campaings .wrapper .panel input {
+    background: transparent;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+}
+
+.campaings .wrapper .table {
+    margin-top: 10px;
+}
+
+.campaings .wrapper .table .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: #000000;
+    background: #fff;
+}
+
+.campaings .wrapper .table .data-table thead th {
+    background: #FEFEFE;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 10px;
+    border-bottom: 1px solid #e3e6e3;
+    color: #000000;
+    white-space: nowrap;
+}
+
+.campaings .wrapper .table .data-table tbody td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #eef1f4;
+    vertical-align: middle;
+}
+
+.campaings .wrapper .table .data-table tbody tr:nth-child(odd) {
+    background: #F3F3F3;
+}
+
+.campaings .wrapper .table .data-table tbody tr:nth-child(even) {
+    background: #FEFEFE;
+}
+
+.campaings .wrapper .table .data-table td {
+    border: 1px solid #e3e6e3;
+}
+
+.campaings .wrapper .table .data-table td:not(.title-col),
+.campaings .wrapper .table .data-table th:not(.title-col) {
+    text-align: center;
+}
+
+.campaings .wrapper .table .data-table .title-col {
+    text-align: right;
+    min-width: 220px;
+}
+
+.campaings .wrapper .table .data-table .icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+}
+
+.campaings .wrapper .table .data-table .icon-btn:hover {
+    opacity: 1;
+}
+
+.campaings .wrapper .table .data-table th:last-child,
+.campaings .wrapper .table .data-table td:last-child {
+    width: 50px;
+}
+
+.campaings .wrapper .empty {
+    width: 100%;
+    background: white;
+    text-align: center;
+    padding: 50px 0;
+    border: 1px solid #e3e6e3;
+}

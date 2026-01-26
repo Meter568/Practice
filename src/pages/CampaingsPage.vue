@@ -1,6 +1,7 @@
 <script setup>
 import axios from "axios";
 import { onMounted, ref, toRaw } from "vue"
+import Header from "../widgets/Header.vue"
 import "../css/campaings.css"
 
 const props = defineProps({
@@ -35,22 +36,25 @@ function GetFirstAdnLastDate(){
 }
 
 function get(){
-    let data = props.toFormData(props.formData);
-    if(date.value != "") data.append("date", date.value);
-    if(date2.value != "") data.append("date2", date2.value);
+    const fd = props.toFormData(props.formData);
+    if(date.value != "") fd.append("date", date.value);
+    if(date2.value != "") fd.append("date2", date2.value);
     loader.value = 1;
-    axios.post(props.url+"/site/getCampaings?auth="+props.user.auth, data).then(function(response){
+    axios.post(props.url+"/site/getCampaigns?auth="+props.user.auth, fd).then(function(response){
         data.value = response.data;
         loader.value = 0;
+        console.log("response.data =", response.data);
+    console.log("data.value =", data.value);
     }).catch(function(error){
         console.log(error);
     })
 }
 
+
 function action(){
     props.formData.copy = "";
     let data = props.toFormData(props.formData);
-    
+
     axios.post(props.url+"/site/actionCampaing?auth="+props.user.auth, data).then(function(response){
         news.value.active = 0;
         if(props.formData.id){
@@ -65,7 +69,7 @@ function action(){
 }
 
 async function del(){
-    if(await header.value.msg.value.confirmFun("Please confirm next action", "Do you want to delete this campaing?")){
+    if(await header.value.msg.confirmFun("Please confirm next action", "Do you want to delete this campaing?")){
         let data = props.toFormData(props.formData);
 
         axios.post(props.url+"/site/deleteCampaing?auth="+props.user.auth, data).then(function(response){
@@ -89,6 +93,7 @@ onMounted(() => {
 
 <template>
     <div class="campaings">
+        <Header ref="header" />
         <div id="spinner" v-if="loader"></div>
         <div class="wrapper">
             <div class="panel">
@@ -103,52 +108,52 @@ onMounted(() => {
                 </div>
             </div>
             <div class="table" v-if="data.items == '' || data.items == undefined">
-                <table>
+                <table class="data-table">
                     <thead>
                         <tr>
-                            <th class="actions">Actions</th>
-                            <th class="id">Fraud clicks</th>
-                            <th class="id">Leads</th>
-                            <th class="id">Clicks</th>
-                            <th class="id">Views</th>
-                            <th class="title">Title</th>
-                            <th class="id"></th>
-                            <th class="id">#</th>
+                            <th>Actions</th>
+                            <th>Fraud clicks</th>
+                            <th>Leads</th>
+                            <th>Clicks</th>
+                            <th>Views</th>
+                            <th class="title-col">Title</th>
+                            <th></th>
+                            <th>#</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in data.items" :key="item.id">
-                            <td class="actions">
+                            <td class="icon-btn">
                                 <a href="#" @click.prevent="formData = item;del()">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </td>
-                            <td class="id">
+                            <td>
                                 <a href="#" @click.prevent="details.active=1;getDetails(item.id, 4)">
                                     <template v-if="item.fclicks">{{ item.fclicks }}</template>
                                     <template v-if="!item.fclicks">0</template>
                                 </a>
                             </td>
-                            <td class="id">
+                            <td>
                                 <a href="#" @click.prevent="details.active=1;getDetails(item.id, 3)">
                                     <template v-if="item.leads">{{ item.leads }}</template>
                                     <template v-if="!item.leads">0</template>
                                 </a>
                             </td>
-                            <td class="id">
+                            <td>
                                 <a href="#" @click.prevent="details.active=1;getDetails(item.id, 2)">
                                     <template v-if="item.clicks">{{ item.clicks }}</template>
                                     <template v-if="!item.clicks">0</template>
                                 </a>
                             </td>
-                            <td class="id">
+                            <td>
                                 <a href="#" @click.prevent="details.active=1;getDetails(item.id, 1)">
                                     {{ item.views }}
                                 </a>
                             </td>
-                            <td><router-link :to="'/campaings/'+item.id"></router-link></td>
-                            <td class="id"></td>
-                            <td class="id">{{ item.id }}</td>
+                            <td class="title-col"><router-link :to="'/campaings/'+item.id"></router-link></td>
+                            <td></td>
+                            <td>{{ item.id }}</td>
                         </tr>
                     </tbody>
                 </table>

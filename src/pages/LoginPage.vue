@@ -6,7 +6,7 @@ import "../css/login.css"
 
 const props = defineProps({
     url: String,
-    user: Object,
+    setUser: Function,
     formData: Object,
     page: Function,
     toFormData: Function

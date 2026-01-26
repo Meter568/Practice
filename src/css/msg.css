@@ -36,6 +36,28 @@
     gap: 5px;
 }
 
+.al .botBtns {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.al .botBtns .btnS {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #00C477;
+    color: #fff;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.al .botBtns .btnS:hover {
+    background-color: #00A05A;
+}
+
 @keyframes showFromLeft {
     0% { opacity: 0; margin-left: -100%; }
     25% { opacity: 0.2; margin-left: -50%; }
