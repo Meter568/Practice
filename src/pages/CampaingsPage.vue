@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { onMounted, ref, toRaw } from "vue"
+import { onMounted, reactive, ref, toRaw } from "vue"
 import Header from "../widgets/Header.vue"
 import "../css/campaings.css"
 
@@ -36,18 +36,37 @@ function GetFirstAdnLastDate(){
 }
 
 function get(){
-    const fd = props.toFormData(props.formData);
+    const fd = props.toFormData(toRaw(props.formData));
     if(date.value != "") fd.append("date", date.value);
     if(date2.value != "") fd.append("date2", date2.value);
     loader.value = 1;
-    axios.post(props.url+"/site/getCampaigns?auth="+props.user.auth, fd).then(function(response){
+    // axios.post(
+    //     props.url + "/site/getCampaigns?auth=" + props.user.auth, 
+    //     fd
+    // ).then(response => {
+    //     data.value = response.data;
+    //     loader.value = 0;
+    //     console.log(response.data);
+    //     console.log(data.value)
+    // }).catch(function(error){
+    //     console.log(error);
+    // })
+    axios.get(
+        props.url + "/site/getCampaigns",
+        {
+            params: {
+            auth: props.user.auth
+            }
+        }
+    ).then(response => {
         data.value = response.data;
         loader.value = 0;
-        console.log("response.data =", response.data);
-    console.log("data.value =", data.value);
-    }).catch(function(error){
+        console.log(response.data);
+        console.log(data.value)
+    }).catch(error => {
         console.log(error);
-    })
+    });
+
 }
 
 
@@ -98,7 +117,7 @@ onMounted(() => {
         <div class="wrapper">
             <div class="panel">
                 <div>
-                    <button class="btn">New</button>
+                    <button class="btn">New <i class="fas fa-plus"></i></button>
                 </div>
                 <div>
                     <input type="date" v-model="date2" @change="get()" /> - <input type="date" v-model="date" @change="get()" />
@@ -107,7 +126,7 @@ onMounted(() => {
                     <h1>Campaings</h1>
                 </div>
             </div>
-            <div class="table" v-if="data.items == '' || data.items == undefined">
+            <div class="table" v-if="data.items && data.items.length">
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -151,14 +170,14 @@ onMounted(() => {
                                     {{ item.views }}
                                 </a>
                             </td>
-                            <td class="title-col"><router-link :to="'/campaings/'+item.id"></router-link></td>
+                            <td class="title-col"><router-link :to="'/campaings/'+item.id">{{ item.title }}</router-link></td>
                             <td></td>
                             <td>{{ item.id }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="empty" v-if="data.items == '' || data.items == undefined">
+            <div class="empty" v-else>
                 No items
             </div>
         </div>
