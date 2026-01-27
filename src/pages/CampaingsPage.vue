@@ -2,6 +2,8 @@
 import axios from "axios";
 import { onMounted, reactive, ref, toRaw } from "vue"
 import Header from "../widgets/Header.vue"
+import Toogle from "../widgets/Toogle.vue"
+import Popup from "../widgets/Popup.vue"
 import "../css/campaings.css"
 
 const props = defineProps({
@@ -36,7 +38,7 @@ function GetFirstAdnLastDate(){
 }
 
 function get(){
-    const fd = props.toFormData(toRaw(props.formData));
+    const fd = props.toFormData(props.formData.value);
     if(date.value != "") fd.append("date", date.value);
     if(date2.value != "") fd.append("date2", date2.value);
     loader.value = 1;
@@ -66,34 +68,41 @@ function get(){
     }).catch(error => {
         console.log(error);
     });
-
 }
 
-
-function action(){
-    props.formData.copy = "";
-    let data = props.toFormData(props.formData);
-
-    axios.post(props.url+"/site/actionCampaing?auth="+props.user.auth, data).then(function(response){
+function action(dataItem = props.formData) {
+    dataItem.copy ??= "";
+    let data = props.toFormData(dataItem);
+    console.log("ACTION DATA:", [...data.entries()]); // должно показывать все поля
+    axios.post(
+        props.url + "/site/actionCampaign?auth=" + props.user.auth,
+        data
+    ).then(() => {
         news.value.active = 0;
-        if(props.formData.id){
-            header.value.msg.value.successFun("Successfully updated campaing!");
-        } else {
-            header.value.msg.value.successFun("Successfully added new campaing!");
-        }
+        header.value.msg.successFun(
+            dataItem.id
+                ? "Successfully updated campaign!"
+                : "Successfully added new campaign!"
+        );
         get();
-    }).catch(function(error){
-        console.log(error);
-    })
+    }).catch(console.error);
 }
 
-async function del(){
-    if(await header.value.msg.confirmFun("Please confirm next action", "Do you want to delete this campaing?")){
-        let data = props.toFormData(props.formData);
-
-        axios.post(props.url+"/site/deleteCampaing?auth="+props.user.auth, data).then(function(response){
-            header.value.msg.value.successFun("Successfully deleted campaing!");
-            get();
+async function del(item){
+    if(await header.value.msg.confirmFun("Please confirm next action", "Do you want to delete this campaign?")){
+        props.formData.value = item;
+        let data = props.toFormData(props.formData.value);
+        console.log("DELETE DATA:", [...data.entries()]);
+        axios.post(
+            props.url + "/site/deleteCampaign?auth=" + props.user.auth, 
+            data
+        ).then(function(response){
+            if(response.data.error){
+                header.value.msg.alertFun(response.data.error);
+            } else {
+                header.value.msg.successFun("Successfully deleted campaign!");
+                get();
+            }
         }).catch(function(error){
             console.log(error);
         })
@@ -112,12 +121,12 @@ onMounted(() => {
 
 <template>
     <div class="campaings">
-        <Header ref="header" />
+        <Header ref="header" :url="url" :user="user" :logout="logout" />
         <div id="spinner" v-if="loader"></div>
         <div class="wrapper">
             <div class="panel">
                 <div>
-                    <button class="btn">New <i class="fas fa-plus"></i></button>
+                    <a class="btnS" href="#" @click.prevent="formData = {};news.active=1">New <i class="fas fa-plus"></i></a>
                 </div>
                 <div>
                     <input type="date" v-model="date2" @change="get()" /> - <input type="date" v-model="date" @change="get()" />
@@ -126,6 +135,20 @@ onMounted(() => {
                     <h1>Campaings</h1>
                 </div>
             </div>
+            <Popup ref="news" :title="(formData && formData.id) ? 'Edit campaign' : 'New campaign'">
+                <div class="form">
+                    <form @submit.prevent="action()" v-if="formData">
+                        <div class="row">
+                            <label>Name</label>
+                            <input type="text" v-model="formData.title" required />
+                        </div>
+                        <div class="row">
+                            <button class="btn" v-if="formData && formData.id">Edit</button>
+                            <button class="btn" v-if="formData && !formData.id">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </Popup>
             <div class="table" v-if="data.items && data.items.length">
                 <table class="data-table">
                     <thead>
@@ -143,7 +166,7 @@ onMounted(() => {
                     <tbody>
                         <tr v-for="item in data.items" :key="item.id">
                             <td class="icon-btn">
-                                <a href="#" @click.prevent="formData = item;del()">
+                                <a href="#" @click.prevent="del(item)">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </td>
@@ -170,8 +193,13 @@ onMounted(() => {
                                     {{ item.views }}
                                 </a>
                             </td>
-                            <td class="title-col"><router-link :to="'/campaings/'+item.id">{{ item.title }}</router-link></td>
-                            <td></td>
+                            <td class="title-col"><router-link :to="'/campaign/'+item.id">{{ item.title }}</router-link></td>
+                            <td>
+                                <Toogle
+                                    v-model="item.published"
+                                    @update:modelValue="action(item)"
+                                />
+                            </td>
                             <td>{{ item.id }}</td>
                         </tr>
                     </tbody>

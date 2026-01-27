@@ -25,7 +25,7 @@
     height: auto;
     display: none;
     color: green;
-    background-color: rgba(255, 228, 228, 0.75);
+    background-color: rgba(218, 249, 223, 0.75);
     box-shadow: 0px 0 10px 0px rgba(11 205 61 / 50%);
     animation: showFromLeft 0.3s linear;
 }

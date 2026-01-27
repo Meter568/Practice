@@ -43,14 +43,21 @@
   font-style: normal;
 }
 
+* {
+  font-family: 'fa-regular-400', sans-serif;
+}
+
 html, body {
   height: 100%;
   margin: 0;
   background-color: #F0F7FA;
-  font-family: 'fa-regular-400', sans-serif;
 }
 
 a {
   color: black;
   text-decoration: none;
+}
+
+li {
+  list-style: none;
 }

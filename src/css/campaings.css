@@ -24,7 +24,7 @@
     justify-content: space-between;
 }
 
-.campaings .wrapper .panel .btn {
+.campaings .wrapper .panel .btnS {
     width: 100%;
     padding: 12px;
     background-color: #00C477;
@@ -36,7 +36,7 @@
     transition: all 0.3s;
 }
 
-.campaings .wrapper .panel .btn:hover {
+.campaings .wrapper .panel .btnS:hover {
     background-color: #00A05A;
 }
 
@@ -45,6 +45,57 @@
     padding: 11px;
     border: 1px solid #ccc;
     border-radius: 0.5rem;
+}
+
+.campaings .wrapper .form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.campaings .wrapper .form form {
+    width: 100%;
+}
+
+.campaings .wrapper .form .row {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.campaings .wrapper .form .row label {
+    font-weight: 600;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.campaings .wrapper .form .row input {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: right;
+    font-size: 16px;
+    padding: 10px 5px;
+    border: 1px solid #ccc;
+    border-radius: 0.2rem;
+    background: #F3F7FD;
+}
+
+.campaings .wrapper .form .row button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #00C477;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.campaings .wrapper .form .row button:hover {
+    background-color: #00A05A;
 }
 
 .campaings .wrapper .table {
@@ -95,6 +146,14 @@
 .campaings .wrapper .table .data-table .title-col {
     text-align: right;
     min-width: 220px;
+}
+
+.campaings .wrapper .table .data-table .title-col a {
+    transition: color 0.3s ease;
+}
+
+.campaings .wrapper .table .data-table .title-col a:hover {
+    color: #00C477;
 }
 
 .campaings .wrapper .table .data-table .icon-btn {

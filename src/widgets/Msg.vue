@@ -86,7 +86,8 @@ function confirmFun(title, text){
 
 defineExpose({
     alertFun,
-    confirmFun
+    confirmFun,
+    successFun
 })
 
 </script>

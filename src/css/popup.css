@@ -29,13 +29,22 @@
     padding: 30px 15px;
 }
 
+.popup .head-popup {
+    font-weight: 600;
+}
+
 .popup .head-popup i {
     cursor: pointer;
     font-size: 17px;
+    transition: color 0.3s ease;
+}
+
+.popup .head-popup i:hover {
+    color: #00C477;
 }
 
 .popup-inner {
     background: #FEFEFE;
-    padding: 30px 15px;
+    padding: 30px 20px;
 }
 
