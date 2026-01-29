@@ -51,7 +51,7 @@ onMounted(() => {
         </div>
         <div class="left-area">
             <div class="header">
-                <div class="wrapper">
+                <div class="wrapper-login">
                     <div class="ar">
                         <h1>Affiliate Sign in</h1>
                     </div>
