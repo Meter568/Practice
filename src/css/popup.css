@@ -19,6 +19,19 @@
     box-shadow: 0 5px 20px rgba(0,0,0,0.3);
 }
 
+.popup.fullscreen {
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+
+    display: flex;
+    flex-direction: column;
+}
+
 
 .popup .head-popup {
     display: flex;
@@ -30,6 +43,7 @@
 }
 
 .popup .head-popup {
+    flex: 0 0 auto;
     font-weight: 600;
 }
 
@@ -44,7 +58,16 @@
 }
 
 .popup-inner {
+    flex: 1 1 auto;
+    min-height: 0; /* 🔥 обязательно для canvas */
+    overflow: hidden;
     background: #FEFEFE;
     padding: 30px 20px;
 }
 
+.popup.fullscreen .popup-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}

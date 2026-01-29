@@ -1,4 +1,4 @@
-.campaings #spinner {
+#spinner {
     background: #919fa640 url('/loader.gif') no-repeat;
     background-position: center;
     background-size: 50px;
@@ -10,7 +10,7 @@
     z-index: 9999999;
 }
 
-.campaings .wrapper {
+.wrapper {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
@@ -18,13 +18,13 @@
     font-family: 'fa-brands-400', sans-serif;
 }
 
-.campaings .wrapper .panel {
+.wrapper .panel {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.campaings .wrapper .panel .btnS {
+.wrapper .panel .btnS {
     width: 100%;
     padding: 12px;
     background-color: #00C477;
@@ -36,43 +36,199 @@
     transition: all 0.3s;
 }
 
-.campaings .wrapper .panel .btnS:hover {
+.wrapper .panel .btnS:hover {
     background-color: #00A05A;
 }
 
-.campaings .wrapper .panel input {
+.panelTop {
+    background: #D5F3EC;
+}
+
+.wrapper .panel input {
     background: transparent;
     padding: 11px;
     border: 1px solid #ccc;
     border-radius: 0.5rem;
 }
 
-.campaings .wrapper .form {
+/* Popup chart panel */
+.chart_panel {
+    flex: 0 0 auto;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chart_panel input {
+    background: transparent;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+}
+
+.chart_body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    margin-top: 30px;
+}
+
+/* Верхние кубы: CTR, Leads, Views, Clicks */
+.chart_al .cubes {
+    display: flex;
+    margin-top: 10px;
+}
+
+.chart_al .cubes > div {
+    flex: 1;
+    width: 70px;
+    padding: 15px;
+    padding-right: 10px;
+    padding-left: 13rem;
+    text-align: right;
+    font-size: 14px;
+}
+
+.ctr { 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: black;
+    border: 1px solid black;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+.ctr .number {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.leads { 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: white;
+    background-color: #319301; 
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.leads .number {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.views { 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: white;
+    background-color: #4700AE; 
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.views .number {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.clicks { 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: white;
+    background-color: #004E93; 
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.clicks .number {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Chart container */
+#chartOuter {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 400px;
+}
+
+#chartOuter canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#chartHints {
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.chartHintsViews {
+    font-weight: 600;
+}
+
+.chartHintsClicks {
+    font-weight: 600;
+}
+
+
+/* Фильтры сайтов справа */
+.filchart {
+    width: 280px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    background: #F6F6F6;
+    padding: 20px 10px;
+}
+
+.itemchart {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+.wrapper .form {
     display: flex;
     align-items: center;
     flex-direction: column;
     gap: 10px;
 }
 
-.campaings .wrapper .form form {
+.form form {
     width: 100%;
 }
 
-.campaings .wrapper .form .row {
+.form .row {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-.campaings .wrapper .form .row label {
+.form .row label {
     font-weight: 600;
     text-align: right;
     margin-bottom: 10px;
 }
 
-.campaings .wrapper .form .row input {
+.form .row input {
     width: 100%;
     box-sizing: border-box;
+    margin-bottom: 10px;
     text-align: right;
     font-size: 16px;
     padding: 10px 5px;
@@ -81,7 +237,19 @@
     background: #F3F7FD;
 }
 
-.campaings .wrapper .form .row button {
+.form .row select {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    text-align: right;
+    font-size: 16px;
+    padding: 10px 5px;
+    border: 1px solid #ccc;
+    border-radius: 0.2rem;
+    background: #F3F7FD;
+}
+
+.form .row button {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
@@ -94,15 +262,15 @@
     transition: all 0.3s;
 }
 
-.campaings .wrapper .form .row button:hover {
+.form .row button:hover {
     background-color: #00A05A;
 }
 
-.campaings .wrapper .table {
+.wrapper .table {
     margin-top: 10px;
 }
 
-.campaings .wrapper .table .data-table {
+.table .data-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
@@ -110,7 +278,7 @@
     background: #fff;
 }
 
-.campaings .wrapper .table .data-table thead th {
+.table .data-table thead th {
     background: #FEFEFE;
     font-weight: 600;
     text-align: left;
@@ -120,62 +288,89 @@
     white-space: nowrap;
 }
 
-.campaings .wrapper .table .data-table tbody td {
+.table .data-table tbody td {
     padding: 12px 10px;
     border-bottom: 1px solid #eef1f4;
     vertical-align: middle;
 }
 
-.campaings .wrapper .table .data-table tbody tr:nth-child(odd) {
+.table .data-table tbody tr:nth-child(odd) {
     background: #F3F3F3;
 }
 
-.campaings .wrapper .table .data-table tbody tr:nth-child(even) {
+.table .data-table tbody tr:nth-child(even) {
     background: #FEFEFE;
 }
 
-.campaings .wrapper .table .data-table td {
+.wrapper .table .data-table td {
     border: 1px solid #e3e6e3;
 }
 
-.campaings .wrapper .table .data-table td:not(.title-col),
-.campaings .wrapper .table .data-table th:not(.title-col) {
+.table .data-table td:not(.title-col),
+.table .data-table th:not(.title-col) {
     text-align: center;
 }
 
-.campaings .wrapper .table .data-table .title-col {
+.table .data-table .title-col {
     text-align: right;
     min-width: 220px;
 }
 
-.campaings .wrapper .table .data-table .title-col a {
+.table .data-table .title-col a {
     transition: color 0.3s ease;
 }
 
-.campaings .wrapper .table .data-table .title-col a:hover {
+.table .data-table .title-col a:hover {
     color: #00C477;
 }
 
-.campaings .wrapper .table .data-table .icon-btn {
+.table .data-table .icons-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 75px;
+    gap: 10px;
+}
+
+.table .data-table .icons-btn .icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
     background: transparent;
     border: none;
     cursor: pointer;
     font-size: 16px;
     line-height: 1;
     opacity: 0.6;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    border-radius: 4px;
 }
 
-.campaings .wrapper .table .data-table .icon-btn:hover {
+.table .data-table .icons-btn .icon-btn:hover {
     opacity: 1;
+    transform: scale(1.1);
+    background-color: rgba(0,0,0,0.05);
 }
 
-.campaings .wrapper .table .data-table th:last-child,
-.campaings .wrapper .table .data-table td:last-child {
+/* Иконки внутри ссылок, если нужно */
+.table .data-table .icons-btn .icon-btn i {
+    pointer-events: none;
+}
+
+.wrapper .table .data-table th:last-child,
+.wrapper .table .data-table td:last-child {
     width: 50px;
 }
 
-.campaings .wrapper .empty {
+.wrapper .table .data-table img {
+    width: 70px;
+    height: 70px
+}
+
+.wrapper .empty {
     width: 100%;
     background: white;
     text-align: center;

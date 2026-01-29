@@ -4,7 +4,7 @@ import "../css/popup.css"
 
 const props = defineProps({
     title: String,
-    fullscreen: Number
+    fullscreen: String
 })
 
 const active = ref(0);
@@ -15,11 +15,13 @@ const left = ref("50%");
 const height = ref("auto");
 const popup = ref(null);
 
+const chartCanvas = ref(null);
+
 watch(active, (newVal) => {
     if(newVal == 1 && !props.fullscreen){
         setTimeout(() => {
             const h = popup.value.clientHeight / 2;
-            top.value = `calc(50% - ${h}px)`;
+            top.value = `calc(65% - ${h}px)`;
         }, 10);
     }
     if(props.fullscreen){
@@ -31,13 +33,13 @@ watch(active, (newVal) => {
     }
 })
 
-defineExpose({ active });
+defineExpose({ active, chartCanvas });
 </script>
 
 <template>
     <template v-if="active==1">
         <div class="popup-back"></div>
-        <div class="popup" :style="{top:top, 'max-width':widthVal, 'margin-left':ml, left:left, height:height}" ref="popup">
+        <div class="popup" :style="{top:top, 'max-width':widthVal, 'margin-left':ml, left:left, height:height}" :class="{ fullscreen: fullscreen }" ref="popup">
         <div class="head-popup">
             <div><a href="#" @click.prevent="active=0"><i class="fas fa-window-close"></i></a></div>
             <div class="head-title">{{ title }}</div>
