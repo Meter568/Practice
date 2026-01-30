@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onMounted, ref } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import Header from "../widgets/Header.vue";
 import Popup from "../widgets/Popup.vue";
@@ -92,6 +92,48 @@ function get() {
         });
 }
 
+function calcTotalsFromLine(line) {
+    let views = 0;
+    let clicks = 0;
+    let leads = 0;
+
+    if (!line) return { views: 0, clicks: 0, leads: 0 };
+
+    Object.values(line).forEach(d => {
+        views += Number(d.views) || 0;
+        clicks += Number(d.clicks) || 0;
+        leads += Number(d.leads) || 0;
+    });
+
+    return { views, clicks, leads };
+}
+
+function getCampaignBannersChart() {
+    const fd = props.toFormData(props.formData.value);
+    if (date.value)  fd.append('date', date.value);
+    if (date2.value) fd.append('date2', date2.value);
+    if (q.value)     fd.append('q', q.value);
+    if (sort.value)  fd.append('sort', sort.value);
+    loader.value = 1;
+    axios
+        .post(props.url + "/site/getCampaignBannersChart?auth=" + props.user.auth, fd)
+        .then(res => {
+            const item = res.data.items;
+            const totals = calcTotalsFromLine(item.line)
+            props.formData.value.views  = totals.views;
+            props.formData.value.clicks = totals.clicks;
+            props.formData.value.leads  = totals.leads;
+
+            props.formData.value.line  = item.line;
+            props.formData.value.sites = item.sites;
+            console.log("SEND", props.formData.value.sites);
+
+            line(item)
+        })
+        .finally(() => loader.value = 0)
+        .catch(console.error);
+}
+
 function getDetails(bid = null, type = null) {
     details.value = {};
 
@@ -175,100 +217,18 @@ async function delAd(item){
     }
 }
 
-// function line(item) {
-//     if (!item?.line || !chartCanvas.value) return;
-
-//     const dates = [];
-//     const clicks = [];
-//     const views = [];
-//     const leads = [];
-
-//     for (const date in item.line) {
-//         dates.push(date);
-//         clicks.push(Number(item.line[date].clicks || 0));
-//         views.push(Number(item.line[date].views || 0));
-//         leads.push(Number(item.line[date].leads || 0))
-//     }
-
-//     if (chartInstance) {
-//         chartInstance.destroy();
-//         chartInstance = null;
-//     }
-
-//     chartInstance = new Chart(chartCanvas.value, {
-//         type: "line",
-//         data: {
-//             labels: dates,
-//             datasets: [
-//                 {
-//                     label: "Clicks",
-//                     data: clicks,
-//                     borderColor: "#00599D",
-//                     backgroundColor: "#00599D",
-//                     tension: 0.3
-//                 },
-//                 {
-//                     label: "Views",
-//                     data: views,
-//                     borderColor: "#5000B8",
-//                     backgroundColor: "#5000B8",
-//                     yAxisID: "y2",
-//                     tension: 0.3
-//                 }
-//             ]
-//         },
-//         options: {
-//             responsive: true,
-//             maintainAspectRatio: false,
-//             plugins: {
-//                 legend: { display: false },
-//                 tooltip: {
-//                     callbacks: {
-//                         title: ctx => ctx[0].dataset.label
-//                     }
-//                 }
-//             },
-//             scales: {
-//                 y: {
-//                     beginAtZero: true
-//                 },
-//                 y2: {
-//                     beginAtZero: true,
-//                     position: "right",
-//                     grid: { drawOnChartArea: false }
-//                 },
-//                 x: {
-//                     ticks: { maxRotation: 0 }
-//                 }
-//             }
-//         }
-//     });
-// }
-
-// function openChart(item, index) {
-//     iChart.value = index;
-//     if (!item.sites) item.sites = [];
-//     all.value = item.sites.length > 0 && item.sites.every(s => s.include === "true") ? "true" : "false";
-//     chart.value.active = 1;
-//     nextTick(() => {
-//         line(item);
-//     });
-// }
-
-// function checkAll(val) {
-//     const item = data.value.items[iChart.value];
-//     if (!item?.sites) return;
-
-//     item.sites.forEach(s => {
-//         s.include = val;
-//     });
-
-//     props.formData.value = item;
-//     get();
-// }
 
 function line(item) {
     requestAnimationFrame(() => {
+        const canvas = chartCanvas.value;
+        if (!canvas) return;
+
+        const rect = canvas.getBoundingClientRect();
+        if (!rect.width || !rect.height) {
+            setTimeout(() => line(item), 50);
+            return;
+        }
+
         if (!chartCanvas.value) return;
 
         if (chartInstance.value) chartInstance.value.destroy();
@@ -278,31 +238,63 @@ function line(item) {
         const views = [];
         const leads = [];
 
-        // Берем диапазон дат из input
-        const start = date.value ? new Date(date.value) : new Date();
-        const end = date2.value ? new Date(date2.value) : new Date();
+        let start, end;
 
-        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-            const key = d.toISOString().substring(0, 10);
-            dates.push(key);
-
-            if (item.line && item.line[key]) {
-                clicks.push(Number(item.line[key].clicks) || 0);
-                views.push(Number(item.line[key].views) || 0);
-                leads.push(Number(item.line[key].leads) || 0);
-            } else {
-                // Если нет item.line, берем значения из самого объекта
-                clicks.push(Number(item.clicks) || 0);
-                views.push(Number(item.views) || 0);
-                leads.push(Number(item.leads) || 0);
-            }
+        // END = вчера
+        if (date2.value) {
+            end = new Date(date2.value);
+        } else {
+            end = new Date();
+            end.setDate(end.getDate() - 1);
+            date2.value = end.toISOString().slice(0, 10);
         }
 
-        // Плагин для вертикальных линий
+        // START = 7 дней назад
+        if (date.value) {
+            start = new Date(date.value);
+        } else {
+            start = new Date(end);
+            start.setDate(start.getDate() - 7);
+            date.value = start.toISOString().slice(0, 10);
+        }
+
+        // защита
+        if (isNaN(start) || isNaN(end) || start > end) return;
+
+
+        if (!start || !end || isNaN(start) || isNaN(end) || start > end) {
+            console.warn("Invalid date range", date.value, date2.value);
+            return;
+        }
+
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+            const day = String(d.getDate()).padStart(2, "0");
+            const month = String(d.getMonth() + 1).padStart(2, "0");
+            const year = d.getFullYear();
+            const key = `${day}.${month}.${year}`;
+            dates.push(key);
+                if (item.line?.[key]) {
+                    clicks.push(+item.line[key].clicks || 0);
+                    views.push(+item.line[key].views || 0);
+                    leads.push(+item.line[key].leads || 0);
+                } else {
+                    clicks.push(0);
+                    views.push(0);
+                    leads.push(0);
+                }
+            }
+        console.log("DATES:", dates);
+        console.log("CLICKS:", clicks);
+        console.log("LINE:", item.line);
+
         const verticalLines = {
             id: 'verticalLines',
             afterDraw(chart) {
-                const { ctx, scales } = chart;
+                const ctx = chart?.ctx;
+                const scales = chart?.scales;
+
+                if (!ctx || !scales?.x || !scales?.y) return;
+
                 const xScale = scales.x;
                 const yTop = scales.y.top;
                 const yBottom = scales.y.bottom;
@@ -312,8 +304,10 @@ function line(item) {
                 ctx.lineWidth = 1;
                 ctx.setLineDash([5, 5]);
 
-                dates.forEach((_, index) => {
+                chart.data.labels.forEach((_, index) => {
                     const x = xScale.getPixelForValue(index);
+                    if (x == null) return;
+
                     ctx.beginPath();
                     ctx.moveTo(x, yTop);
                     ctx.lineTo(x, yBottom);
@@ -374,8 +368,7 @@ function line(item) {
                             minRotation: 45,
                             maxTicksLimit: 7,
                             callback(value) {
-                                const d = new Date(this.getLabelForValue(value));
-                                return d.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" });
+                                return this.getLabelForValue(value);
                             }
                         },
                         grid: {
@@ -404,16 +397,25 @@ function line(item) {
 }
 
 function checkAll(val) {
-    const sites = data.value.items?.[iChart.value]?.sites;
-    console.log("sites =", sites);
-    if (!sites) return;
+    const item = data.value.items?.[iChart.value];
+    if (!item || !item.sites) return;
 
-    sites.forEach(s => {
+    item.sites.forEach(s => {
         s.include = val;
     });
 
-    props.formData.value = data.value.items[iChart.value];
-    get();
+    all.value = val;
+}
+
+function onSiteToggle() {
+    const item = data.value.items?.[iChart.value];
+    if (!item || !item.sites) return;
+
+    all.value = getAllValue(item);
+}
+
+function getAllValue(item) {
+    return item.sites.every(s => s.include === "true") ? "true" : "false";
 }
 
 function openChart(item, index) { 
@@ -422,12 +424,12 @@ function openChart(item, index) {
 
     if (!item.sites) item.sites = [];
 
-    all.value = item.sites.length > 0 && item.sites.every(s => s.include);
+    all.value = item.sites.length > 0 ? getAllValue(item) : "true";
 
     chart.value.active = 1;
 
     nextTick(() => {
-        requestAnimationFrame(() => line(item));
+        setTimeout(() => line(item), 100);
     });
 }
 
@@ -451,15 +453,29 @@ function editBanner(item) {
     ad.value.active = 1;
 }
 
-
 onMounted(() => {
     if(!props.user){
         props.logout();
     }
     get();
-    date.value = "";
-    date2.value = "";
 })
+
+watch([date, date2], async () => {
+    if (!chart.value || chart.value.active !== 1) return;
+
+    await nextTick();
+    getCampaignBannersChart();
+});
+
+watch(() => chart.value?.active, (active) => {
+    if (!active && chartInstance.value) {
+        chartInstance.value.destroy();
+        chartInstance.value = null;
+        date.value = "";
+        date2.value = "";
+        get()
+    }
+});
 
 </script>
 
@@ -502,7 +518,7 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
-                    <div><input type="date" v-model="date2" @change="get();" /> - <input type="date" v-model="date" @change="get();" /></div>
+                    <div><input type="date" v-model="date2" /> - <input type="date" v-model="date" /></div>
                 </div>
                 <div class="chart_body">
                     <div id="chartOuter">
@@ -517,14 +533,23 @@ onMounted(() => {
                             All
                             <Toogle v-model="all" @update:modelValue="checkAll" />
                         </div>
-                        <div v-if="data.items[iChart].sites">
-                            <div class="itemchart" v-for="s in data.items[iChart].sites" :key="s.id">
-                            <Toogle v-model="s.include" @update:modelValue="s.include = $event; formData = data.items[iChart]; get()" />
-                            {{ s.site }}
+                        <div v-if="data.items[iChart]?.sites?.length">
+                            <div 
+                                class="itemchart" 
+                                v-for="s in data.items[iChart].sites.filter(s => s.site !== null && s.site !== '')" 
+                                :key="s.id"
+                            >
+                                <div>
+                                {{ s.site }}
+                                </div>
+                                <Toogle
+                                v-model="s.include"
+                                @update:modelValue="onSiteToggle"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </Popup>
         <Popup ref="news" :title="(props.formData.value && props.formData.value.id != null) ? 'Edit campaign' : 'New campaign'">
             <div class="form">

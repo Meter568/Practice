@@ -4,7 +4,9 @@ import "../css/popup.css"
 
 const props = defineProps({
     title: String,
-    fullscreen: String
+    fullscreen: Boolean,
+    date: String,
+    date2: String
 })
 
 const active = ref(0);
@@ -39,9 +41,9 @@ defineExpose({ active, chartCanvas });
 <template>
     <template v-if="active==1">
         <div class="popup-back"></div>
-        <div class="popup" :style="{top:top, 'max-width':widthVal, 'margin-left':ml, left:left, height:height}" :class="{ fullscreen: fullscreen }" ref="popup">
+        <div class="popup" :style="{top:top, 'max-width':widthVal, 'margin-left':ml, left:left, height:height}" :class="{ fullscreen }" ref="popup">
         <div class="head-popup">
-            <div><a href="#" @click.prevent="active=0"><i class="fas fa-window-close"></i></a></div>
+            <div><a href="#" @click.prevent="active=0; date=''; date2=''"><i class="fas fa-window-close"></i></a></div>
             <div class="head-title">{{ title }}</div>
         </div>
         <div class="popup-inner">
