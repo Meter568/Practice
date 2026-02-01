@@ -1,0 +1,41 @@
+.banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tabs ul {
+    padding: 0;
+    margin: 0;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 10px;
+}
+
+.tabs ul li {
+    position: relative;
+    padding: 13px;
+    border-radius: 0.4rem;
+    background: #FEFEFE;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.tabs ul li::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background: #ccc;
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+
+.tabs ul li.active::after {
+    background: #2ecc71;
+}
+
