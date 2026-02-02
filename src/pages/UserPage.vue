@@ -158,11 +158,13 @@ function actionSite(item) {
 
     let fd = props.toFormData(item);
 
+    console.log("ACTION DATA:", [...fd.entries()]);
+
     axios.post(props.url + "/site/actionSite?auth=" + props.user.auth, fd)
         .then(function(response){
             news.value.active = 0
 
-            if(item.id){ // проверяем item.id
+            if(item.id){
                 header.value.msg.successFun("Successfully updated site!");
             } else {
                 header.value.msg.successFun("Successfully added new site!");

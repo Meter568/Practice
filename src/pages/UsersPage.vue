@@ -23,18 +23,35 @@ const header = ref(null);
 const news = ref(null);
 const copy = ref(null);
 
-function get(){
-    let fd = props.toFormData(props.formData.value);
-    if(type.value != "") fd.append('type', tyep.value);
-    loader.value = 1;
-    axios.post(props.url + "/site/getUsers?auth" + props.user.auth, fd).then(function(response){
-        loader.value = 0;
-        data.value = response.data;
-        if(response.data.items && response.data.types[0] && !type.value) type.value = response.data.types[0].id;
-        if(uid.value > -1) props.formData.copy = data.items[uid.value].multi;
-    }).catch(function(error){
-        console.log("Error get users: ", error)
+function get() {
+  // Создаём FormData из текущего formData
+let fd = props.toFormData(props.formData.value);
+
+if (type.value != "") fd.append('type', type.value);
+
+loader.value = 1;
+
+axios.post(`${props.url}/site/getUsers?auth=${props.user.auth}`, fd)
+    .then(function(response) {
+    loader.value = 0;
+    data.value = response.data;
+
+    if (!props.formData.value) {
+        props.formData.value = {};
+    }
+
+    if (uid.value >= 0 && uid.value < data.value.items.length) {
+        props.formData.value.copy = data.value.items[uid.value].multi;
+        console.log(props.formData.value.copy);
+    } else {
+        console.log("uid.value не соответствует индексу items:", uid.value);
+    }
+
+
     })
+    .catch(function(error) {
+        console.log("Error get users: ", error);
+    });
 }
 
 function action(dataItem = props.formData.value){
@@ -91,6 +108,12 @@ onMounted(() => {
     if(!props.user){
         props.logout()
     }
+    if (copy.value.active === 0) {
+        if (!props.formData.value) {
+            props.formData.value = {}  // создаём объект, если его нет
+        }
+        props.formData.value.copy = "Choose type"
+    }
     get();
 })
 
@@ -138,20 +161,20 @@ onMounted(() => {
             </Popup>
             <Popup ref="copy" :title="'Copy banner'">
                 <div class="form">
-                    <form @submit.prevent="action()" v-if="formData">
+                    <form v-if="formData">
                         <div class="row">
                             <label>Code</label>
-                            <textarea v-model="formData.copy"></textarea>
+                            <textarea v-model="props.formData.value.copy"></textarea>
                         </div>
                         <div class="row">
                             <label>Type</label>
-                            <select v-model="formData.type" v-if="data.types" required>
+                            <select v-model="type" @change="get()" v-if="data.types" required>
                                 <option value="0">---</option>
                                 <option v-for="c in data.types" :key="c.id" :value="c.id">{{ c.title }}</option>
                             </select>
                         </div>
                         <div class="row">
-                            <button class="btn" @click.prevent="copyText(formData.copy)">Copy code</button>
+                            <button class="btn" @click.prevent="copyText(props.formData.value.copy)">Copy code</button>
                         </div>
                     </form>
                 </div>
