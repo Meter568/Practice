@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import Header from "../widgets/Header.vue";
 import Popup from "../widgets/Popup.vue";
 import Toogle from "../widgets/Toogle.vue";
@@ -108,14 +108,21 @@ onMounted(() => {
     if(!props.user){
         props.logout()
     }
-    if (copy.value.active === 0) {
-        if (!props.formData.value) {
-            props.formData.value = {}  // создаём объект, если его нет
-        }
-        props.formData.value.copy = "Choose type"
-    }
     get();
 })
+
+watch(
+    () => copy.value?.active,
+    (newVal) => {
+        if (newVal === 0) {
+            if (!props.formData.value) {
+                props.formData.value = {}
+            }
+            props.formData.value.copy = "Choose type"
+            type.value = 0
+        }
+    }
+)
 
 </script>
 
