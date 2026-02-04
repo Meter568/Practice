@@ -4,6 +4,10 @@ import CampaingsPage from '../pages/CampaingsPage.vue'
 import CampaignPage from '../pages/CampaignPage.vue'
 import UsersPage from "../pages/UsersPage.vue"
 import UserPage from "../pages/UserPage.vue"
+import StatisticsPage from "../pages/StatisticsPage.vue"
+import AdsPage from "../pages/AdsPage.vue"
+import SitesPage from "../pages/SitesPage.vue"
+import PaymentsPage from "../pages/PaymentsPage.vue"
 
 const routes = [
     {
@@ -30,6 +34,26 @@ const routes = [
         path: '/user/:id',
         name: 'User',
         component: UserPage
+    },
+    {
+        path: '/statistics',
+        name: 'Statistics',
+        component: StatisticsPage
+    },
+    {
+        path: '/ads',
+        name: 'Ads',
+        component: AdsPage
+    },
+    {
+        path: '/sites',
+        name: 'Sites',
+        component: SitesPage
+    },
+    {
+        path: '/payments',
+        name: 'Payments',
+        component: PaymentsPage
     }
 ]
 

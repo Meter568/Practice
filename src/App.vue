@@ -75,6 +75,14 @@ function init() {
       user.value = JSON.parse(window.localStorage.getItem("user"));
       if(route.path == '/' && user.value.type=='admin'){
         page('/campaings');
+      } else if(['/campaings', '/campaing', '/users', '/user'].includes(route.path) && user.value.type != 'admin'){
+        page('/statistics');
+      } else if(['/statistics', '/payments', '/sites'].includes(route.path) && user.value.type == 'admin'){
+        page('/campaings');
+      } else if(['/campaings', '/campaing', '/users', '/user', '/statistics', '/payments', '/sites'].includes(route.path)){
+        page();
+      } else if(!['/campaings', '/campaing', '/users', '/user', '/statistics', '/payments', '/sites'].includes(route.path)){
+        page();
       }
     } else {
       page('/')

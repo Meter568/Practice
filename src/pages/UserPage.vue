@@ -57,7 +57,7 @@ function get(){
 
 function action(dataItem = props.formData.value){
     let fd = props.toFormData(dataItem);
-    console.log("ACTION DATA:", [...data.entries()]);
+    console.log("ACTION DATA:", [...fd.entries()]);
     axios.post(props.url + "/site/actionUser?auth=" + props.user.auth, fd).then(function(response){
         if(response.data.error){
             header.value.msg.alertFun(response.data.error);
@@ -97,6 +97,7 @@ async function del(item){
 function actionStatistic(item){
     let fd = props.toFormData(item);
     fd.append('uid', route.params.id);
+    console.log("ACTION DATA:", [...fd.entries()]);
     axios.post(props.url + "/site/actionStatistic?auth=" + props.user.auth, fd).then(function(response){
         if(response.data.error){
             header.value.msg.alertFun(response.data.error);

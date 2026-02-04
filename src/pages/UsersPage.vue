@@ -54,8 +54,8 @@ axios.post(`${props.url}/site/getUsers?auth=${props.user.auth}`, fd)
     });
 }
 
-function action(dataItem = props.formData.value){
-    let fd = props.toFormData(dataItem);
+function action(){
+    let fd = props.toFormData(props.formData);
     console.log("ACTION DATA:", [...fd.entries()]);
     axios.post(props.url + "/site/actionUser?auth=" + props.user.auth, fd).then(function(response){
         if(response.data.error){
@@ -64,7 +64,7 @@ function action(dataItem = props.formData.value){
         } else {
             news.value.active = 0;
         }
-        if(dataItem.id){
+        if(props.formData.id){
             header.value.msg.successFun("Successfully updated user!");
         } else {
             header.value.msg.successFun("Successfully added new user!");
@@ -115,14 +115,18 @@ watch(
     () => copy.value?.active,
     (newVal) => {
         if (newVal === 0) {
+            // Обеспечиваем, что formData существует
             if (!props.formData.value) {
                 props.formData.value = {}
             }
-            props.formData.value.copy = "Choose type"
-            type.value = 0
+
+            // Сбрасываем текст и select
+            props.formData.value.copy = "Choose type";
+            type.value = 0;
         }
     }
 )
+
 
 </script>
 
@@ -168,14 +172,14 @@ watch(
             </Popup>
             <Popup ref="copy" :title="'Copy banner'">
                 <div class="form">
-                    <form v-if="formData">
+                    <form v-if="props.formData.value">
                         <div class="row">
                             <label>Code</label>
                             <textarea v-model="props.formData.value.copy"></textarea>
                         </div>
                         <div class="row">
                             <label>Type</label>
-                            <select v-model="type" @change="get()" v-if="data.types" required>
+                            <select v-model="type" @change="get()" required>
                                 <option value="0">---</option>
                                 <option v-for="c in data.types" :key="c.id" :value="c.id">{{ c.title }}</option>
                             </select>

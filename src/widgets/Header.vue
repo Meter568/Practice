@@ -50,10 +50,10 @@ defineExpose({
                 </ul>
                 <ul :class="{active:menu==1}" v-if="props.user && props.user.type && props.user.type!='admin'">
                     <li v-if="menu==1"><i class="fas fa-times" @click="menu=0"></i></li>
-                    <li><router-link to="/statistics">Statistics <i class="fas fa-chart-area"></i></router-link></li>
-                    <li><router-link to="/ads">Ads <i class="fas fa-image"></i></router-link></li>
-                    <li><router-link to="/sites">Sites <i class="fab fa-chrome"></i></router-link></li>
-                    <li><router-link to="/payments">Payments <i class="fas fa-credit-card"></i></router-link></li>
+                    <li><router-link :class="{ 'router-link-active': route.path.includes('payments') }" to="/payments">Payments <i class="fas fa-credit-card"></i></router-link></li>
+                    <li><router-link :class="{ 'router-link-active': route.path.includes('sites') }" to="/sites">Sites <i class="fab fa-chrome"></i></router-link></li>
+                    <li><router-link :class="{ 'router-link-active': route.path.includes('ads') }" to="/ads">Ads <i class="fas fa-image"></i></router-link></li>
+                    <li><router-link :class="{ 'router-link-active': route.path.includes('statistics') }" to="/statistics">Statistics <i class="fas fa-chart-area"></i></router-link></li>
                 </ul>
             </div>
             <div class="logo">
