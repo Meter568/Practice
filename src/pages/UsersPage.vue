@@ -136,7 +136,7 @@ watch(
         <div id="spinner" v-if="loader"></div>
         <div class="wrapper">
             <div class="panel">
-                <div>
+                <div class="btn">
                     <a class="btnS" href="#" @click.prevent="formData = {};news.active=1">New <i class="fas fa-plus"></i></a>
                 </div>
                 <div><Search /></div>

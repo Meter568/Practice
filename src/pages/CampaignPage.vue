@@ -485,7 +485,7 @@ watch(() => chart.value?.active, (active) => {
         <div id="spinner" v-if="loader"></div>
         <div class="panelTop">
             <div class="wrapper">
-                <div class="panel">
+                <div class="panelAnother">
                     <div class="edit">
                         <a class="btnS" href="#" @click.prevent="editCampaign(data.info)">Edit campaign <i class="fas fa-edit"></i></a>
                     </div>
@@ -568,7 +568,7 @@ watch(() => chart.value?.active, (active) => {
     </div>
     <div class="wrapper">
         <div class="panel">
-            <div>
+            <div class="btn">
                 <a class="btnS" href="#" @click.prevent="newBanner()">
                     New <i class="fas fa-plus"></i>
                 </a>

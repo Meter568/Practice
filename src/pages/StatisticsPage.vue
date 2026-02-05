@@ -126,7 +126,7 @@ watch(
         <div id="spinner" v-if="loader"></div>
         <div class="wrapper">
             <div class="panel">
-                <div>
+                <div class="btn">
                     <a class="btnS" href="#" @click.prevent="setMulti(item)">
                         Multi banners
                         <i class="fas fa-images"></i>

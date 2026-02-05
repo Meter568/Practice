@@ -401,7 +401,7 @@ onMounted(() => {
         <Header ref="header" :url="url" :user="user" :logout="logout"  />
         <div id='spinner' v-if="loader"></div>
         <div class="panelTop">
-            <div class="wrapper">
+            <div class="wrapper" style="padding: 1px 0;">
                 <div class="panel">
                     <div class="edit">
                         <a class="btnS" href="#" @click.prevent="editUser(data.info)">Edit user <i class="fas fa-edit"></i></a>
@@ -644,7 +644,7 @@ onMounted(() => {
             </div>
             <div v-if="tab==2">
                 <div class="panel">
-                    <div>
+                    <div class="btn">
                         <a class="btnS" href="#" @click.prevent="addPayment()">Add payment <i class="fas fa-plus"></i></a>
                     </div>
                     <div>

@@ -13,7 +13,7 @@ const props = defineProps({
 const route = useRoute();
 
 const active = ref(0);
-const menu = ref(0);
+const menu = ref(false);
 
 const msg = ref(null);
 
@@ -42,20 +42,60 @@ defineExpose({
                 </div>
             </div>
             <div id="menu">
-                <!-- <i class="fas fa-bars" @click="menu==1"></i> -->
-                <ul :class="{active:menu==1}" v-if="props.user && props.user.type && props.user.type=='admin'">
-                    <li v-if="menu==1"><i class="fas fa-times" @click="menu==0"></i></li>
-                    <li><router-link :class="{ 'router-link-active': route.path.includes('user') }" to="/users">Users <i class="fas fa-users"></i></router-link></li>
-                    <li><router-link :class="{ 'router-link-active': route.path.includes('campaing') }" to="/campaings">Campaings <i class="fas fa-bullhorn"></i></router-link></li>
-                </ul>
-                <ul :class="{active:menu==1}" v-if="props.user && props.user.type && props.user.type!='admin'">
-                    <li v-if="menu==1"><i class="fas fa-times" @click="menu=0"></i></li>
-                    <li><router-link :class="{ 'router-link-active': route.path.includes('payments') }" to="/payments">Payments <i class="fas fa-credit-card"></i></router-link></li>
-                    <li><router-link :class="{ 'router-link-active': route.path.includes('sites') }" to="/sites">Sites <i class="fab fa-chrome"></i></router-link></li>
-                    <li><router-link :class="{ 'router-link-active': route.path.includes('ads') }" to="/ads">Ads <i class="fas fa-image"></i></router-link></li>
-                    <li><router-link :class="{ 'router-link-active': route.path.includes('statistics') }" to="/statistics">Statistics <i class="fas fa-chart-area"></i></router-link></li>
-                </ul>
-            </div>
+                <i id="mobile-menu" class="fas fa-bars" @click="menu = true"></i>
+                <ul class="mobile-nav" :class="{ active: menu }">
+                    <!-- ADMIN -->
+                    <template v-if="props.user?.type === 'admin'">
+                        <li class="close">
+                            <i class="fas fa-times" @click="menu = false"></i>
+                        </li>
+                        <li>
+                            <router-link
+                                to="/campaings"
+                                @click="menu = false"
+                                :class="{ 'router-link-active': route.path.includes('campaing') }"
+                            >
+                                Campaings <i class="fas fa-bullhorn"></i>
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link
+                                to="/users"
+                                @click="menu = false"
+                                :class="{ 'router-link-active': route.path.includes('user') }"
+                            >
+                                Users <i class="fas fa-users"></i>
+                            </router-link>
+                        </li>
+                    </template>
+                    <!-- USER -->
+                    <template v-else>
+                        <li class="close">
+                            <i class="fas fa-times" @click="menu = false"></i>
+                        </li>
+                        <li>
+                            <router-link to="/statistics" @click="menu=false">
+                                Statistics <i class="fas fa-chart-area"></i>
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link to="/ads" @click="menu=false">
+                                Ads <i class="fas fa-image"></i>
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link to="/sites" @click="menu=false">
+                                Sites <i class="fab fa-chrome"></i>
+                            </router-link>
+                        </li>
+                        <li>
+                            <router-link to="/payments" @click="menu=false">
+                                Payments <i class="fas fa-credit-card"></i>
+                            </router-link>
+                        </li>
+                    </template>
+                    </ul>
+                </div>
             <div class="logo">
                 <img :src="props.url+'/app/views/images/logo.svg'" alt="Logo">
             </div>

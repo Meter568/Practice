@@ -39,3 +39,21 @@
 .switch input:checked + .slider::before {
     transform: translateX(20px);
 }
+
+@media (max-width: 1230px) {
+    .switch {
+        width: 36px;
+        height: 20px;
+    }
+
+    .slider::before {
+        width: 14px;
+        height: 14px;
+        left: 3px;
+        top: 3px;
+    }
+
+    .switch input:checked + .slider::before {
+        transform: translateX(16px);
+    }
+}

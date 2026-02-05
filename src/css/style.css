@@ -47,6 +47,10 @@
   font-family: 'fa-regular-400', sans-serif;
 }
 
+h1 {
+  margin: 0;
+}
+
 html, body {
   height: 100%;
   margin: 0;
@@ -60,4 +64,9 @@ a {
 
 li {
   list-style: none;
+}
+
+td, th {
+  white-space: normal;
+  word-break: break-word;
 }
