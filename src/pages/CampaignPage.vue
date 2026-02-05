@@ -56,6 +56,7 @@ const header = ref(null);
 const news = ref(null);
 const ad = ref(null);
 const chart = ref(null);
+const img = ref(null);
 
 const chartCanvas = ref(null);
 const chartInstance = ref(null);
@@ -609,6 +610,11 @@ watch(() => chart.value?.active, (active) => {
                 </form>
             </div>
         </Popup>
+        <Popup ref="img" title="Banner">
+            <div class="banner" v-if="props.formData.value && props.formData.value.img">
+                <img :src="url + '/' + props.formData.value.img" />
+            </div>
+        </Popup>
         <div class="table" v-if="data.items!=''">
             <table class="data-table">
                 <thead>
@@ -672,7 +678,7 @@ watch(() => chart.value?.active, (active) => {
                             </a>
                         </td>
                         <td class="image">
-                            <a href="#" @click.prevent="formData = item; ad.active=1;">
+                            <a href="#" @click.prevent="props.formData.value = item; img.active = 1;">
                                 <img :src="url+'/'+item.img" />
                             </a>
                         </td>
